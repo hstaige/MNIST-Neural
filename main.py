@@ -38,7 +38,7 @@ keepingOn = False
 numLayers = 3
 numCategories = 10
 
-numTrained = 400
+numTrained = 40
 
 numTested = 4000
 
@@ -75,7 +75,7 @@ B2 = fillWithRands(layer3Len).flatten() # L3 by 1 vector
 chosenEpochs = []
 chosenCosts = []
 #essentially a while true with a built in exit
-for epoch in range(100000):
+for epoch in range(1000000):
     W1temp = np.zeros((layer1Len,layer2Len)) #L1 by L2 matrix
     B1temp =  np.zeros(layer2Len).flatten() #L2 by 1 vector
 
@@ -86,6 +86,7 @@ for epoch in range(100000):
 
     #takes in one input point (e.g. '3') and calculates outputs
     for idx in range(numTrained):
+        idx = random.randint(1,60000)-1
         Z1 = calcZVals(W1,x_train[idx],B1)
         A2 = sigmoidActivation(Z1)
 
@@ -110,18 +111,18 @@ for epoch in range(100000):
     print(epoch, cost)
 
     #saves data for review after the run
-    if epoch % 100 == 0:
+    if epoch % 1000 == 0:
         chosenEpochs.append(epoch)
         chosenCosts.append(cost)
         saveData(epoch,cost)
 
-    if keyboard.is_pressed('s'):
+    if keyboard.is_pressed('-'):
         keepingOn = not keepingOn
 
     if keepingOn:
-        keyboard.press('w')
+        keyboard.press('=')
 
-    if keyboard.is_pressed('e') or cost < 0.05:
+    if keyboard.is_pressed('+') or cost < 0.001:
         break
 
 
