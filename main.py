@@ -1,6 +1,6 @@
 from neededModules import * #contains imports and constants
 from gradient import * #calculates gradient of network
-from Intiializer import * #loads data and randomizes starting weights
+from Initializer import * #loads data and randomizes starting weights
 from WorkbooksTests import saveData
 
 #fills a np array of the specificied size with random values 0<x<1
