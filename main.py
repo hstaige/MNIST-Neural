@@ -34,17 +34,21 @@ def getCost(A,labels): #squared error
     squaredSum = np.sum(squared)/2
     return squaredSum
 
+gradMomentum = 0 #initial value
 keepingOn = False
 numLayers = 3
 numCategories = 10
 
 numTrained = 40
 
-numTested = 4000
+numTested = 10000
 
 layer1Len = 784
 layer2Len = 28
 layer3Len = 10
+
+momentum = 0.8
+
 learn = -0.13
 learn = learn/numTrained
 
@@ -75,7 +79,7 @@ B2 = fillWithRands(layer3Len).flatten() # L3 by 1 vector
 chosenEpochs = []
 chosenCosts = []
 #essentially a while true with a built in exit
-for epoch in range(1000000):
+for epoch in range(20000):
     W1temp = np.zeros((layer1Len,layer2Len)) #L1 by L2 matrix
     B1temp =  np.zeros(layer2Len).flatten() #L2 by 1 vector
 
@@ -83,6 +87,7 @@ for epoch in range(1000000):
     B2temp =  np.zeros(layer3Len).flatten() # L3 by 1 vector
 
     cost = 0
+    gradChangeSum = 0
 
     #takes in one input point (e.g. '3') and calculates outputs
     for idx in range(numTrained):
@@ -95,17 +100,16 @@ for epoch in range(1000000):
 
         #idx 0 = W1grad, 1 = B1grad, 2 = W2grad, 3 = B2grad
         gradientChange = gradientCalculations(x_train[idx],y_train[idx],A2,A3,W1,B1,W2,B2)
-        W1temp = np.add(gradientChange[0],W1temp)
-        B1temp = np.add(gradientChange[1],B1temp)
-        W2temp = np.add(gradientChange[2],W2temp)
-        B2temp = np.add(gradientChange[3],B2temp)
+        gradChangeSum = np.add(gradChangeSum,gradientChange)
 
         cost += getCost(A3,y_train[idx])
 
-    W1 = np.add(W1,W1temp*learn)
-    B1 = np.add(B1,B1temp*learn)
-    W2 = np.add(W2,W2temp*learn)
-    B2 = np.add(B2,B2temp*learn)
+    gradMomentum = gradMomentum *momentum + (1-momentum)*gradChangeSum
+
+    W1 = np.add(W1,gradMomentum[0]*learn)
+    B1 = np.add(B1,gradMomentum[1]*learn)
+    W2 = np.add(W2,gradMomentum[2]*learn)
+    B2 = np.add(B2,gradMomentum[3]*learn)
 
     cost = cost / numTrained
     print(epoch, cost)
@@ -122,12 +126,8 @@ for epoch in range(1000000):
     if keepingOn:
         keyboard.press('=')
 
-    if keyboard.is_pressed('+') or cost < 0.001:
+    if keyboard.is_pressed('+') or cost < 0.005:
         break
-
-
-plt.plot(chosenEpochs,chosenCosts)
-plt.savefig('Epoch_vs_Cost.png')
 
 
 tested = 0
@@ -144,3 +144,6 @@ for idx in range(numTested):
         right += 1
 
 print(right/tested)
+
+plt.plot(chosenEpochs,chosenCosts)
+plt.savefig('Epoch_vs_Cost.png')
