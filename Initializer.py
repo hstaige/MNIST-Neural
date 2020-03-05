@@ -1,6 +1,13 @@
 from neededModules import *
 
 def fillWithRands(dim1,dim2=1):
+    """
+    Fills a np array [dim1,dim2] with random values between -1 and 1.
+
+    INPUT: dim1 (int); Optionally dim2 (int)
+
+    OUTPUT: random array [dim1, dim2]
+    """
     temp = np.zeros((dim1,dim2))
     for i in range(dim1):
         for j in range(dim2):
@@ -8,10 +15,16 @@ def fillWithRands(dim1,dim2=1):
     return temp
 
 def loadStartingData():
+    """
+    Loads data from the mnist database and preprocesses it for easy insertion
+    into neural network.
+
+    OUTPUT: x_train, [60000,28,28]; y_train, [10,1]
+    """
     (x_train,y_train),(x_test,y_test) = tf.keras.datasets.mnist.load_data()
 
-    x_train = x_train.reshape((len(x_train), 784))
-    x_test = x_test.reshape((len(x_test),784))
+    x_train = x_train.reshape((len(x_train), 784))/255
+    x_test = x_test.reshape((len(x_test),784))/255
 
     #converts y_train from labels to list of probabilities
     y_temp = np.zeros((len(y_train),numCategories))

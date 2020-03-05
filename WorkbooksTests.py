@@ -1,4 +1,4 @@
-from openpyxl import load_workbook
+from neededModules import *
 
 def saveData(epochs,cost):
     Workbook = load_workbook('C:\CodingProjects\CreativeInquiry\MNIST-Neural\EpochsAndCost.xlsx')

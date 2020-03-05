@@ -69,7 +69,6 @@ def calcB1grad(B2grad,W2,A2):
            A2, [layer2len, 1]
 
     OUTPUT: B1grad, [layer2Len, 1]
-
     """
     temp1 = np.dot(W2,B2grad) #layer2Len * 1 vector
     sigmGradient = sigmoidGradient(A2) #layer2len * 1 vector
@@ -84,7 +83,6 @@ def calcW1Grad(B1grad, x_train):
     INPUT: B1grad, [layer2Len,1] ; x_train, [layer1Len, 1] ;
 
     OUTPUT: W1grad, [layer1Len, layer2Len]
-
     """
 
     temp1 = B1grad.reshape((layer2Len,1))
